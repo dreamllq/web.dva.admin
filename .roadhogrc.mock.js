@@ -53,6 +53,8 @@ const proxy = {
     $body: postRule,
   },
   'GET /api/notices': getNotices,
+  'POST /admin/*': 'http://127.0.0.1:8360/',
+  'GET /admin/*': 'http://127.0.0.1:8360/',
 };
 
-export default noProxy ? {} : delay(proxy, 1000);
+export default noProxy ? {} : proxy;

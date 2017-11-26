@@ -6,11 +6,17 @@
     "transform-class-properties",
     ["import", { "libraryName": "antd", "libraryDirectory": "es", "style": true }]
   ],
+  "define": {
+    "__DEV__": false
+  },
   "env": {
     "development": {
       "extraBabelPlugins": [
         "dva-hmr"
-      ]
+      ],
+      "define": {
+        "__DEV__": true
+      }
     }
   },
   "externals": {

@@ -160,7 +160,7 @@ class BasicLayout extends React.PureComponent {
               >
                 {icon}<span>{item.name}</span>
               </Link>
-            )
+              )
           }
         </Menu.Item>
       );

@@ -16,9 +16,25 @@ export const getNavData = app => [
     path: '/',
     children: [
       {
-        name: '查询表格',
-        path: 'table-list',
-        component: dynamicWrapper(app, ['rule'], () => import('../routes/List/TableList')),
+        name: '系统管理',
+        path: 'sys',
+        children: [
+          {
+            name: '用户管理',
+            path: 'users',
+            component: dynamicWrapper(app, ['users'], () => import('../routes/Sys/Users')),
+          },
+          {
+            name: '角色管理',
+            path: 'role-list',
+            component: dynamicWrapper(app, ['rule'], () => import('../routes/List/TableList')),
+          },
+          {
+            name: '资源管理',
+            path: 'resource-list',
+            component: dynamicWrapper(app, ['rule'], () => import('../routes/List/TableList')),
+          },
+        ],
       },
     ],
   },
