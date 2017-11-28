@@ -9,9 +9,11 @@ export default {
     pageSize: 10,
   },
   effects: {
-    *fetch({ page = 1 }, { call, put, select }) {
+    *fetch({ page = 1 }, { put, select }) {
       const { pageSize } = yield select(state => state.users);
-      let { items, total } = yield UsersService.gets({ offset: (page - 1) * pageSize, limit: pageSize });
+      const result = yield UsersService.gets({ offset: (page - 1) * pageSize, limit: pageSize });
+      let { items } = result;
+      const { total } = result;
       items = items.map(item => item.toJSON());
       yield put({ type: 'payload', payload: { items, total, page } });
     },
@@ -31,6 +33,15 @@ export default {
       const { newPassword, id } = payload;
       const users = yield UsersService.get(id);
       yield users.resetPassword({ newPassword });
+    },
+    *update({ payload }, { put, select }) {
+      const { id } = payload;
+      const { page } = yield select(state => state.users);
+      const users = yield UsersService.get(id);
+      users.email = payload.email;
+      users.phone = payload.phone;
+      yield users.update();
+      yield put({ type: 'fetch', page });
     },
   },
   reducers: {

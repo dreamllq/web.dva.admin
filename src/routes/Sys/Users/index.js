@@ -1,11 +1,12 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Modal, Card, Row, Col, Radio, Input, Progress, Button, Icon, Dropdown, Menu, Avatar, Table, Divider } from 'antd';
+import { Modal, Card, Button, Table, Divider } from 'antd';
 import qs from 'query-string';
 import styles from './index.less';
 import PageHeaderLayout from '../../../layouts/PageHeaderLayout';
 import UsersAddModal from './UsersAdd';
 import ResetPasswordModal from './ResetPassword';
+import UsersEditModal from './UsersEdit';
 
 @connect(({ users }) => ({ users }))
 export default class Users extends PureComponent {
@@ -41,7 +42,15 @@ export default class Users extends PureComponent {
         render: ((record) => {
           return (
             <div>
-              <a href="javascript:;">修改</a>
+              <a
+                href="javascript:;"
+                onClick={() => {
+                  const { username, email, phone } = record;
+                  self.users_edit_modal.props.form.setFieldsValue({ username, email, phone });
+                  self.users_edit_modal.refs.modal.show(record);
+                }}
+              >修改
+              </a>
               <Divider type="vertical" />
               <a
                 href="javascript:;"
@@ -51,9 +60,7 @@ export default class Users extends PureComponent {
                     content: '确认删除此用户吗？',
                     okText: '确认',
                     cancelText: '取消',
-                    onOk() {
-                      dispatch({ type: 'users/delete', ...record });
-                    },
+                    onOk() { dispatch({ type: 'users/delete', ...record }); },
                   });
                 }}
               >删除
@@ -61,12 +68,10 @@ export default class Users extends PureComponent {
               <Divider type="vertical" />
               <a
                 href="javascript:;"
-                onClick={() => {
-                  self.reset_password_modal.refs.modal.show(record);
-                }}
+                onClick={() => { self.reset_password_modal.refs.modal.show(record); }}
               >重置密码
               </a>
-            </div>
+            </div >
           );
         }),
       },
@@ -91,7 +96,7 @@ export default class Users extends PureComponent {
                 icon="plus"
                 type="primary"
                 onClick={() => {
-                  this.user_add_modal.refs.modal.show();
+                  this.users_add_modal.refs.modal.show();
                 }}
               >新建
               </Button>
@@ -107,7 +112,7 @@ export default class Users extends PureComponent {
             />
           </Card>
         </PageHeaderLayout>
-        <UsersAddModal {...UsersAddModalProps} wrappedComponentRef={inst => this.user_add_modal = inst} />
+        <UsersAddModal {...UsersAddModalProps} wrappedComponentRef={inst => this.users_add_modal = inst} />
         <ResetPasswordModal
           onOk={(value, record) => {
             return dispatch({
@@ -118,6 +123,19 @@ export default class Users extends PureComponent {
             });
           }}
           wrappedComponentRef={inst => this.reset_password_modal = inst}
+        />
+        <UsersEditModal
+          onOk={(value, record) => {
+            return dispatch({
+              type: 'users/update',
+              payload: {
+                email: value.email,
+                phone: value.phone,
+                id: record.id,
+              },
+            });
+          }}
+          wrappedComponentRef={inst => this.users_edit_modal = inst}
         />
       </div>
 

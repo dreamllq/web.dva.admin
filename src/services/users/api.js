@@ -1,5 +1,5 @@
-import request from '../../utils/request';
 import qs from 'querystring';
+import request from '../../utils/request';
 
 export async function userAdd(params) {
   return request('/admin/users/add', {

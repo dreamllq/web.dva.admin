@@ -84,6 +84,7 @@ export default class ResetPassword extends PureComponent {
               )}
           </FormItem>
         </Form>
-      </Modal>);
+      </Modal>
+    );
   }
 }

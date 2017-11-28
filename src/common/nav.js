@@ -26,8 +26,8 @@ export const getNavData = app => [
           },
           {
             name: '角色管理',
-            path: 'role-list',
-            component: dynamicWrapper(app, ['rule'], () => import('../routes/List/TableList')),
+            path: 'role',
+            component: dynamicWrapper(app, ['role'], () => import('../routes/Sys/Role')),
           },
           {
             name: '资源管理',
