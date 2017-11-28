@@ -1,5 +1,5 @@
-import { userAdd, usersGets } from './api';
-import User from '../../entities/User'
+import { userAdd, usersGets, usersGet, usersUpdate, usersDelete, usersResetPassword } from './api';
+import User from '../../entities/User';
 
 
 export default class {
@@ -12,4 +12,10 @@ export default class {
     items = items.map(userData => new User(userData));
     return { items, total };
   }
+
+  static async get(id) {
+    const { data } = await usersGet({ id });
+    return new User(data);
+  }
 }
+

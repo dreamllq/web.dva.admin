@@ -21,6 +21,17 @@ export default {
       yield UsersService.add(payload);
       yield put({ type: 'fetch', page });
     },
+    *delete({ id }, { put, select }) {
+      const { page } = yield select(state => state.users);
+      const users = yield UsersService.get(id);
+      yield users.delete();
+      yield put({ type: 'fetch', page });
+    },
+    *resetPassword({ payload }, { put, select }) {
+      const { newPassword, id } = payload;
+      const users = yield UsersService.get(id);
+      yield users.resetPassword({ newPassword });
+    },
   },
   reducers: {
     payload(state, { payload }) {

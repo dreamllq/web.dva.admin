@@ -7,11 +7,12 @@ export default class extends PureComponent {
     this.state = {
       visible: false,
       loading: false,
+      payload: null,
     };
   }
 
-  show() {
-    this.setState({ visible: true });
+  show(payload) {
+    this.setState({ visible: true, payload });
   }
 
   hide() {
@@ -27,8 +28,8 @@ export default class extends PureComponent {
   }
 
   render() {
-    const { children, onOk, ...props } = this.props;
-    const { visible, loading } = this.state;
+    const { children, onCancel, onOk, ...props } = this.props;
+    const { visible, loading, payload } = this.state;
     const { setState } = this;
     const self = this;
 
@@ -38,12 +39,26 @@ export default class extends PureComponent {
       title: '设置',
       visible,
       onCancel() {
+        onCancel && onCancel();
         self.hide();
       },
       confirmLoading: loading,
       onOk() {
-        onOk && onOk();
-        self.loading();
+        // onOk && onOk(payload);
+        // self.loading();
+        if (onOk) {
+          const promise = onOk(payload);
+          if (promise.then && typeof promise.then === 'function') {
+            self.loading();
+            promise.then(() => {
+              self.hide();
+            }).catch(() => {
+              self.unloading();
+            });
+          }
+        } else {
+          self.hide();
+        }
       },
     };
 
