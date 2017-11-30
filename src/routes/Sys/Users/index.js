@@ -28,7 +28,7 @@ export default class Users extends PureComponent {
         dataIndex: 'id',
       },
       {
-        title: 'username',
+        title: '用户名',
         dataIndex: 'username',
       },
       {

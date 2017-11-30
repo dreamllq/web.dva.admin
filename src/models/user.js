@@ -1,4 +1,6 @@
+import { routerRedux } from 'dva/router';
 import { query as queryUsers, queryCurrent } from '../services/user';
+import { access } from '../services/access';
 
 export default {
   namespace: 'user',
@@ -26,11 +28,17 @@ export default {
       });
     },
     *fetchCurrent(_, { call, put }) {
-      const response = yield call(queryCurrent);
-      yield put({
-        type: 'saveCurrentUser',
-        payload: response,
-      });
+      try {
+        const user = yield access.sync();
+        yield put({
+          type: 'saveCurrentUser',
+          payload: user.toJSON(),
+        });
+      } catch (e) {
+        yield put(routerRedux.push('/user/login'));
+      }
+
+      // const response = yield call(queryCurrent);
     },
   },
 

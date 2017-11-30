@@ -16,16 +16,16 @@ const formItemLayout = {
 };
 
 @Form.create()
-export default class UserEdit extends PureComponent {
+export default class UserAdd extends PureComponent {
   render() {
     const { getFieldDecorator, validateFields, resetFields } = this.props.form;
     const { onOk } = this.props;
 
-    const onSubmit = (payload) => {
+    const onSubmit = () => {
       return new Promise((resolve, reject) => {
-        validateFields({ force: true }, (err, value) => {
+        validateFields((err, value) => {
           if (!err) {
-            onOk(value, payload)
+            onOk(value)
               .then(() => resolve())
               .catch(e => reject(e));
           } else {
@@ -36,32 +36,45 @@ export default class UserEdit extends PureComponent {
     };
 
     const ModalProps = {
-      title: '修改用户',
-      onOk(payload) {
-        return onSubmit(payload);
+      title: '添加角色',
+      onOk() {
+        return onSubmit();
+      },
+      afterClose() {
+        resetFields();
       },
     };
 
     return (
       <Modal {...ModalProps} ref="modal">
-        <Form >
-          <FormItem label="用户名" {...formItemLayout} hasFeedback>
-            {getFieldDecorator('username')(
-              <Input disabled />
-            )}
-          </FormItem>
-          <FormItem label="邮箱" {...formItemLayout} hasFeedback>
-            {getFieldDecorator('email')(
+        <Form>
+          <FormItem label="角色名" {...formItemLayout} hasFeedback>
+            {getFieldDecorator('name', {
+              rules: [
+                {
+                  required: true,
+                  message: '必填',
+                },
+              ],
+            })(
               <Input placeholder="请输入" />
-            )}
+              )}
           </FormItem>
-          <FormItem label="手机号" {...formItemLayout} hasFeedback>
-            {getFieldDecorator('phone')(
+          <FormItem label="key" {...formItemLayout} hasFeedback>
+            {getFieldDecorator('key', {
+              rules: [
+                {
+                  required: true,
+                  message: '必填',
+                },
+              ],
+            })(
               <Input placeholder="请输入" />
-            )}
+              )}
           </FormItem>
         </Form>
       </Modal>
     );
   }
 }
+

@@ -82,6 +82,7 @@ class BasicLayout extends React.PureComponent {
   }
   onMenuClick = ({ key }) => {
     if (key === 'logout') {
+      console.log(111);
       this.props.dispatch({
         type: 'login/logout',
       });
@@ -117,6 +118,7 @@ class BasicLayout extends React.PureComponent {
     if (!menusData) {
       return [];
     }
+
     return menusData.map((item) => {
       if (!item.name) {
         return null;
@@ -154,12 +156,12 @@ class BasicLayout extends React.PureComponent {
               </a>
             ) : (
               <Link
-                to={itemPath}
-                target={item.target}
-                replace={itemPath === this.props.location.pathname}
-              >
-                {icon}<span>{item.name}</span>
-              </Link>
+                  to={itemPath}
+                  target={item.target}
+                  replace={itemPath === this.props.location.pathname}
+                >
+                  {icon}<span>{item.name}</span>
+                </Link>
               )
           }
         </Menu.Item>
@@ -334,11 +336,11 @@ class BasicLayout extends React.PureComponent {
                   emptyImage="https://gw.alipayobjects.com/zos/rmsportal/HsIsxMZiWKrNUavQUXqx.svg"
                 />
               </NoticeIcon>
-              {currentUser.name ? (
+              {currentUser.username ? (
                 <Dropdown overlay={menu}>
                   <span className={`${styles.action} ${styles.account}`}>
                     <Avatar size="small" className={styles.avatar} src={currentUser.avatar} />
-                    {currentUser.name}
+                    {currentUser.username}
                   </span>
                 </Dropdown>
               ) : <Spin size="small" style={{ marginLeft: 8 }} />}
@@ -358,7 +360,7 @@ class BasicLayout extends React.PureComponent {
                   )
                 )
               }
-              <Redirect exact from="/" to="/table-list" />
+              <Redirect exact from="/" to="/sys/users" />
             </Switch>
             <GlobalFooter
               links={[{
@@ -400,4 +402,5 @@ export default connect(state => ({
   collapsed: state.global.collapsed,
   fetchingNotices: state.global.fetchingNotices,
   notices: state.global.notices,
+  login: state.login,
 }))(BasicLayout);

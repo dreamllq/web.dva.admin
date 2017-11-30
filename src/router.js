@@ -40,10 +40,11 @@ function getLayout(navData, path) {
 function RouterConfig({ history, app }) {
   const navData = getNavData(app);
   const BasicLayout = getLayout(navData, 'BasicLayout').component;
+  const UserLayout = getLayout(navData, 'UserLayout').component;
 
   const passProps = {
     app,
-    navData,
+    // navData,
     getRouteData: (path) => {
       return getRouteData(navData, path);
     },
@@ -53,7 +54,8 @@ function RouterConfig({ history, app }) {
     <LocaleProvider locale={zhCN}>
       <Router history={history}>
         <Switch>
-          <Route path="/" render={props => <BasicLayout {...props} {...passProps} />} />
+          <Route path="/user" render={props => <UserLayout {...props} {...passProps} navData={[navData[1]]} />} />
+          <Route path="/" render={props => <BasicLayout {...props} {...passProps} navData={[navData[0]]} />} />
         </Switch>
       </Router>
     </LocaleProvider>

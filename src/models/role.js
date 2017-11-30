@@ -16,7 +16,20 @@ export default {
       const { total } = result;
       items = items.map(item => item.toJSON());
       yield put({ type: 'payload', payload: { items, total, page } });
-    }
+    },
+    *add({ name, key }, { put }) {
+      yield RoleService.add({ name, key });
+      yield put({ type: 'reloadTable' });
+    },
+    *delete({ id }, { put }) {
+      const role = yield RoleService.get(id);
+      yield role.delete();
+      yield put({ type: 'reloadTable' });
+    },
+    *reloadTable(_, { select, put }) {
+      const { page } = yield select(state => state.role);
+      yield put({ type: 'fetch', page });
+    },
   },
   reducers: {
     payload(state, { payload }) {

@@ -38,6 +38,13 @@ export default function request(url, options) {
   return fetch(url, newOptions)
     .then(checkStatus)
     .then(response => response.json())
+    .then(({ data, errno, errmsg }) => {
+      if (errno) {
+        throw new Error(errmsg);
+      } else {
+        return { data };
+      }
+    })
     .catch((error) => {
       if (error.code) {
         notification.error({
